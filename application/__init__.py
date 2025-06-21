@@ -14,8 +14,8 @@ def create_app():
     db.init_app(app)
     login_manager.init_app(app)
 
-    from app.auth.routes import auth_bp
-    from app.mood.routes import mood_bp
+    from application.auth.routes import auth_bp
+    from application.mood.routes import mood_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(mood_bp)
