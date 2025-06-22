@@ -1,0 +1,40 @@
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ url_for('mood.landing') }}">
+    <div class="sidebar-brand-icon rotate-n-15">
+      <i class="fas fa-brain"></i>
+    </div>
+    <div class="sidebar-brand-text mx-3">MoodCast</div>
+  </a>
+
+  <hr class="sidebar-divider my-0">
+
+  <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('mood.dashboard') }}">
+      <i class="fas fa-home"></i>
+      <span>Dashboard</span>
+    </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('mood.log_mood') }}">
+      <i class="fas fa-edit"></i>
+      <span>Log Mood</span>
+    </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('mood.heatmap') }}">
+      <i class="fas fa-calendar-alt"></i>
+      <span>Heatmap</span>
+    </a>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('mood.triggers') }}">
+      <i class="fas fa-brain"></i>
+      <span>Triggers</span>
+    </a>
+  </li>
+
+  <hr class="sidebar-divider">
+</ul>

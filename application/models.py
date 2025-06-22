@@ -1,6 +1,7 @@
 from application import db
 from flask_login import UserMixin
 from application import login_manager
+from datetime import date
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -13,7 +14,8 @@ class User(db.Model, UserMixin):
 class MoodEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     mood = db.Column(db.String(50), nullable=False)
-    date = db.Column(db.Date, nullable=False)
+    intensity = db.Column(db.Integer)  # optional but included for insights
+    date = db.Column(db.Date, nullable=False, default=date.today)
     tags = db.Column(db.String(200))
     notes = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

@@ -20,4 +20,19 @@ def create_app():
     app.register_blueprint(auth_bp)
     app.register_blueprint(mood_bp)
 
+    from flask import render_template
+    from datetime import datetime
+
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('errors/404.html'), 404
+
+    @app.errorhandler(500)
+    def internal_error(e):
+        return render_template('errors/500.html'), 500
+
+    @app.context_processor
+    def inject_current_year():
+        return {'current_year': datetime.now().year}
+
     return app

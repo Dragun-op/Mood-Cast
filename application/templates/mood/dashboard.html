@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard - MoodCast{% endblock %}
+
+{% block content %}
+<div class="container text-center">
+  <h1 class="h3 mb-4 text-gray-800">Welcome back, {{ username }} 👋</h1>
+
+  <div class="row">
+    <!-- Log Mood -->
+    <div class="col-md-4 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body text-center">
+          <i class="fas fa-edit fa-2x text-primary mb-2"></i>
+          <h5 class="card-title">Log Today's Mood</h5>
+          <a href="{{ url_for('mood.log_mood') }}" class="btn btn-primary mt-2">Log Now</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Heatmap -->
+    <div class="col-md-4 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body text-center">
+          <i class="fas fa-calendar-alt fa-2x text-info mb-2"></i>
+          <h5 class="card-title">Mood Heatmap</h5>
+          <a href="{{ url_for('mood.heatmap') }}" class="btn btn-info mt-2">View Heatmap</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Triggers -->
+    <div class="col-md-4 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body text-center">
+          <i class="fas fa-brain fa-2x text-success mb-2"></i>
+          <h5 class="card-title">Emotional Triggers</h5>
+          <a href="{{ url_for('mood.triggers') }}" class="btn btn-success mt-2">View Insights</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

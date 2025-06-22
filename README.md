@@ -32,26 +32,22 @@
 ## 📁 Folder Structure
 
 MoodCast/
+├── app/
+│   ├── __init__.py       
+│   ├── models.py         
+│   ├── auth/
+│   │   └── routes.py
+│   ├── mood/
+│   │   └── routes.py
+│   ├── static/
+│   └── templates/
 ├── run.py
 ├── config.py
-├── .env
 ├── .flaskenv
+├── .env
 ├── requirements.txt
 ├── README.md
-├── app/
-│ ├── init.py
-│ ├── models.py
-│ ├── auth/
-│ │ └── routes.py
-│ ├── mood/
-│ │ └── routes.py
-│ ├── templates/
-│ │ ├── auth/
-│ │ │ └── login.html
-│ │ └── mood/
-│ │ └── calendar.html
-│ └── static/
-│ └── (css/js/icons)
+
 
 ## 🧰 Setup Instructions
 
