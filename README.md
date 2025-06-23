@@ -11,7 +11,7 @@
 - 🧠 AI-ready logic to identify mood triggers and recurring patterns
 - 🎯 Personalized suggestions based on user feedback
 - 🧾 Weekly summaries for emotional reflection
-- 👥 Trusted-sharing mode for friends/family (optional)
+- 👥 Trusted-sharing mode for friends/family 
 - 🚨 Crisis detection system to prompt professional help when needed
 
 ---
@@ -25,28 +25,57 @@
 | Authentication| Flask-Login                   |
 | Frontend      | HTML, CSS, Jinja2             |
 | Optional AI   | scikit-learn / transformers   |
-| Deployment    | Render / Railway (recommended) |
+| Deployment    | Render / Railway               |
 
 ---
 
 ## 📁 Folder Structure
 
+```bash
 MoodCast/
-├── app/
-│   ├── __init__.py       
-│   ├── models.py         
+├── application/
+│   ├── __init__.py
+│   ├── models.py
 │   ├── auth/
 │   │   └── routes.py
 │   ├── mood/
 │   │   └── routes.py
 │   ├── static/
+│   │   ├── css/
+│   │   │   ├── custom.css
+│   │   │   └── sb-admin-2.min.css
+│   │   ├── js/
+│   │   │   ├── heatmap.js
+│   │   │   └── sb-admin-2.min.js
+│   │   ├── img/
+│   │   ├── icon/
+│   │   └── vendor/              
 │   └── templates/
+│       ├── base.html
+│       ├── landing.html
+│       ├── auth/
+│       │   ├── login.html
+│       │   ├── register.html
+│       │   └── forgot_password.html
+│       ├── mood/
+│       │   ├── log_mood.html
+│       │   ├── heatmap.html
+│       │   ├── dashboard.html
+│       │   └── insights.html
+│       ├── errors/
+│       │   ├── 404.html
+│       │   └── 500.html
+│       └── partials/
+│           ├── _sidebar.html
+│           ├── _topbar.html
+│           └── _footer.html
 ├── run.py
 ├── config.py
 ├── .flaskenv
 ├── .env
 ├── requirements.txt
 ├── README.md
+```
 
 
 ## 🧰 Setup Instructions
