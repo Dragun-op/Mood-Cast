@@ -6,28 +6,19 @@
   <h2 class="mb-4">📅 Mood Heatmap</h2>
   <p class="lead">See how your moods changed over time</p>
 
-  <div id="calendar" class="calendar-grid mt-4 mb-5"></div>
+  <div id="heatmap" class="mb-5"></div>
 
   <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-md-10">
       <div class="card shadow">
         <div class="card-body">
           <h5 class="card-title">Legend</h5>
           <div class="d-flex flex-wrap justify-content-center">
             {% for mood, color in {
-              'Happy': '#28a745',
-              'Sad': '#6c757d',
-              'Angry': '#dc3545',
-              'Anxious': '#fd7e14',
-              'Neutral': '#17a2b8',
-              'Excited': '#ffc107',
-              'Depressed': '#343a40',
-              'Stressed': '#e83e8c',
-              'Calm': '#20c997',
-              'Lonely': '#6f42c1',
-              'Frustrated': '#ff4c4c',
-              'Bored': '#adb5bd',
-              'Hopeful': '#00bcd4',
+              'Happy': '#28a745', 'Sad': '#6c757d', 'Angry': '#dc3545', 'Anxious': '#fd7e14',
+              'Neutral': '#17a2b8', 'Excited': '#ffc107', 'Depressed': '#343a40',
+              'Stressed': '#e83e8c', 'Calm': '#20c997', 'Lonely': '#6f42c1',
+              'Frustrated': '#ff4c4c', 'Bored': '#adb5bd', 'Hopeful': '#00bcd4',
               'Grateful': '#9ccc65'
             }.items() %}
               <div class="d-flex align-items-center m-2">
@@ -40,10 +31,10 @@
       </div>
     </div>
   </div>
-</div>
 
-<script>
-  window.moodData = {{ mood_data | tojson }};
-</script>
-<script src="{{ url_for('static', filename='js/heatmap.js') }}"></script>
+  <script>
+    window.moodData = {{ mood_data | tojson }};
+  </script>
+  <script src="{{ url_for('static', filename='js/heatmap.js') }}"></script>
+</div>
 {% endblock %}

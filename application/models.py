@@ -14,7 +14,7 @@ class User(db.Model, UserMixin):
 class MoodEntry(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     mood = db.Column(db.String(50), nullable=False)
-    intensity = db.Column(db.Integer)  # optional but included for insights
+    intensity = db.Column(db.Integer)
     date = db.Column(db.Date, nullable=False, default=date.today)
     tags = db.Column(db.String(200))
     notes = db.Column(db.Text)

@@ -4,9 +4,11 @@ from wtforms.validators import DataRequired, NumberRange, Optional
 
 class MoodForm(FlaskForm):
     mood = SelectField('Mood', choices=[
-        ('Happy', 'Happy'), ('Sad', 'Sad'), ('Anxious', 'Anxious'),
-        ('Angry', 'Angry'), ('Excited', 'Excited'), ('Calm', 'Calm'),
-        ('Tired', 'Tired'), ('Frustrated', 'Frustrated')
+        ('Happy', 'Happy'), ('Sad', 'Sad'), ('Angry', 'Angry'), ('Anxious', 'Anxious'),
+        ('Neutral', 'Neutral'), ('Excited', 'Excited'), ('Depressed', 'Depressed'),
+        ('Stressed', 'Stressed'), ('Calm', 'Calm'), ('Lonely', 'Lonely'),
+        ('Frustrated', 'Frustrated'), ('Bored', 'Bored'), ('Hopeful', 'Hopeful'),
+        ('Grateful', 'Grateful')
     ], validators=[DataRequired()])
 
     intensity = IntegerField('Intensity (1-10)', validators=[

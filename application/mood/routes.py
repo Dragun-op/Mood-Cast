@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from application import db
 from application.models import MoodEntry
 from application.mood.forms import MoodForm
+from datetime import date, timedelta
 
 mood_bp = Blueprint('mood', __name__)
 
@@ -34,20 +35,12 @@ def log_mood():
     return render_template('mood/log_mood.html', form=form)
 
 
+
 @mood_bp.route('/heatmap')
 @login_required
 def heatmap():
-    mood_entries = MoodEntry.query.filter_by(user_id=current_user.id).all()
-
-    mood_data = [
-        {
-            "date": entry.date.strftime('%Y-%m-%d'),
-            "mood": entry.mood,
-            "intensity": getattr(entry, "intensity", None)  
-        }
-        for entry in mood_entries
-    ]
-
+    entries = MoodEntry.query.filter_by(user_id=current_user.id).all()
+    mood_data = {entry.date.strftime('%Y-%m-%d'): entry.mood for entry in entries}
     return render_template('mood/heatmap.html', mood_data=mood_data)
 
 @mood_bp.route('/triggers')
