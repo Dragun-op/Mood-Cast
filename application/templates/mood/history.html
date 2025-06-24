@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Mood History{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-4 text-center">📝 Mood History</h2>
+
+  <form method="get" class="row g-3 mb-4">
+    <div class="col-md-3">
+      <input type="text" name="search" class="form-control" placeholder="Search mood, notes, tags" value="{{ request.args.get('search', '') }}">
+    </div>
+    <div class="col-md-2">
+      <input type="date" name="start_date" class="form-control" value="{{ request.args.get('start_date', '') }}">
+    </div>
+    <div class="col-md-2">
+      <input type="date" name="end_date" class="form-control" value="{{ request.args.get('end_date', '') }}">
+    </div>
+    <div class="col-md-2">
+      <select name="sort_by" class="form-select">
+        <option value="date" {% if request.args.get('sort_by') == 'date' %}selected{% endif %}>Sort by Date</option>
+        <option value="intensity" {% if request.args.get('sort_by') == 'intensity' %}selected{% endif %}>Sort by Intensity</option>
+      </select>
+    </div>
+    <div class="col-md-1">
+      <select name="order" class="form-select">
+        <option value="desc" {% if request.args.get('order') == 'desc' %}selected{% endif %}>⬇️</option>
+        <option value="asc" {% if request.args.get('order') == 'asc' %}selected{% endif %}>⬆️</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-primary w-100">🔍 Filter</button>
+    </div>
+  </form>
+
+  {% if entries %}
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered shadow-sm">
+        <thead class="table-light">
+          <tr>
+            <th>Date</th>
+            <th>Mood</th>
+            <th>Intensity</th>
+            <th>Tags</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for entry in entries %}
+          <tr>
+            <td>{{ entry.date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ entry.mood }}</td>
+            <td>{{ entry.intensity or '—' }}</td>
+            <td>{{ entry.tags or '—' }}</td>
+            <td>{{ entry.notes or '—' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info">No mood entries found for the selected filters.</div>
+  {% endif %}
+</div>
+{% endblock %}

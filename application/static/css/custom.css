@@ -1,52 +1,9 @@
-#heatmap {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  justify-content: center;
-  padding: 20px 0;
+#cal-heatmap {
+  overflow-x: auto; margin: auto; padding: 10px 0;
 }
-
-.week-column {
-  display: flex;
-  flex-direction: column;
-  margin-right: 4px;
+.cal-heatmap .graph text {
+  fill: #6c757d !important; font-size: 0.75rem;
 }
-
-.day-cell {
-  width: 14px;
-  height: 14px;
-  margin: 1px;
-  border-radius: 4px;
-  background-color: #eaeaea;
-  transition: background-color 0.3s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.day-cell:hover {
-  border: 1px solid #adb5bd;
-}
-
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
-  max-width: 600px;
-  margin: auto;
-}
-
-.calendar-cell {
-  width: 100%;
-  padding-top: 100%; 
-  position: relative;
-  border-radius: 4px;
-  cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.calendar-cell::after {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  border-radius: 4px;
+.cal-heatmap .subdomain {
+  stroke: #fff; stroke-width: 1;
 }

@@ -61,7 +61,7 @@ MoodCast/
 │       │   ├── log_mood.html
 │       │   ├── heatmap.html
 │       │   ├── dashboard.html
-│       │   └── insights.html
+│       │   └── triggers.html
 │       ├── errors/
 │       │   ├── 404.html
 │       │   └── 500.html

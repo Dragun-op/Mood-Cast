@@ -6,7 +6,7 @@ class MoodForm(FlaskForm):
     mood = SelectField('Mood', choices=[
         ('Happy', 'Happy'), ('Sad', 'Sad'), ('Angry', 'Angry'), ('Anxious', 'Anxious'),
         ('Neutral', 'Neutral'), ('Excited', 'Excited'), ('Depressed', 'Depressed'),
-        ('Stressed', 'Stressed'), ('Calm', 'Calm'), ('Lonely', 'Lonely'),
+        ('Tired', 'Tired'),('Stressed', 'Stressed'), ('Calm', 'Calm'), ('Lonely', 'Lonely'),
         ('Frustrated', 'Frustrated'), ('Bored', 'Bored'), ('Hopeful', 'Hopeful'),
         ('Grateful', 'Grateful')
     ], validators=[DataRequired()])

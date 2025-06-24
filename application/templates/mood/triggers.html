@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Mood Triggers{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">🧠 Mood Triggers</h2>
+
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      {% if triggers %}
+        <div class="card shadow">
+          <div class="card-body">
+            <h5 class="card-title">Top Potential Triggers (AI Suggestions)</h5>
+            <ul class="list-group list-group-flush">
+              {% for trigger, count in triggers %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  {{ trigger }}
+                  <span class="badge badge-primary badge-pill">{{ count }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      {% else %}
+        <div class="alert alert-info">No trigger data found yet. Try adding some mood notes.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
