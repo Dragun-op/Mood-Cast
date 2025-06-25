@@ -92,7 +92,7 @@
 ├── run.py
 └── venv/  
 
-
+---
 
 🧰 Setup Instructions
 
@@ -145,6 +145,8 @@
         
         flask run
 
+---
+
 📌 Future Enhancements
 
     ⏱ Weekly mood summary reports with visualizations
@@ -157,3 +159,4 @@
 
     🧪 Admin analytics dashboard
 
+---
