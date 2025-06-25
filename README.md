@@ -94,7 +94,7 @@
 
 ---
 
-🧰 Setup Instructions
+## 🧰 Setup Instructions
 
     1️⃣ Clone the Repository
 
@@ -147,7 +147,7 @@
 
 ---
 
-📌 Future Enhancements
+## 📌 Future Enhancements
 
     ⏱ Weekly mood summary reports with visualizations
 
