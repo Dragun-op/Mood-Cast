@@ -1,12 +1,12 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from application import db
-from application.models import MoodEntry
+from application.models import MoodEntry,UserTriggerCategory
 from application.mood.forms import MoodForm
 from datetime import date, timedelta , datetime
 from sqlalchemy import or_, and_
-from application.mood.nlp_utils import extract_keyphrases
 from collections import Counter
+from application.mood.nlp_advice import get_trigger_categories_with_advice,get_emotion_scores
 
 
 mood_bp = Blueprint('mood', __name__)
@@ -62,21 +62,27 @@ def heatmap():
         mood_colors=mood_colors
     )
 
-@mood_bp.route('/triggers')
+@mood_bp.route("/triggers")
 @login_required
 def triggers():
-    moods = MoodEntry.query.filter_by(user_id=current_user.id).all()
-    
-    negative_moods = ['Sad', 'Anxious', 'Depressed', 'Frustrated', 'Stressed', 'Lonely']
-    phrases = []
+    entries = MoodEntry.query.filter_by(user_id=current_user.id).order_by(MoodEntry.date.desc()).limit(5).all()
+    trigger_results = []
 
-    for mood in moods:
-        if mood.mood in negative_moods and mood.notes:
-            phrases.extend(extract_keyphrases(mood.notes))
+    for entry in entries:
+        if entry.notes:
+            advice_data = get_trigger_categories_with_advice(entry.notes)
+            emotions = get_emotion_scores(entry.notes)
+            trigger_results.append({
+                "notes": entry.notes,
+                "timestamp": entry.date,
+                "triggers": advice_data,
+                "emotion_scores": emotions
+            })
 
-    most_common = Counter(phrases).most_common(10)
+    top_categories = UserTriggerCategory.query.filter_by(user_id=current_user.id)\
+        .order_by(UserTriggerCategory.count.desc()).limit(3).all()
 
-    return render_template('mood/triggers.html', triggers=most_common)
+    return render_template("mood/triggers.html", trigger_results=trigger_results, top_categories=top_categories)
 
 @mood_bp.route('/history')
 @login_required
@@ -86,8 +92,15 @@ def mood_history():
     search = request.args.get('search')
     start_date = request.args.get('start_date')
     end_date = request.args.get('end_date')
-    sort_by = request.args.get('sort_by', 'date')  # default: date
+    sort_by = request.args.get('sort_by', 'date')
     order = request.args.get('order', 'desc')
+
+    if 'date' in request.args:
+        try:
+            target = datetime.strptime(request.args['date'], '%Y-%m-%d').date()
+            query = query.filter(MoodEntry.date == target)
+        except:
+            pass
 
     if search:
         query = query.filter(or_(
@@ -119,3 +132,22 @@ def mood_history():
 
     entries = query.all()
     return render_template('mood/history.html', entries=entries)
+
+@mood_bp.route('/toggle-sharing')
+@login_required
+def toggle_sharing():
+    current_user.sharing_enabled = not current_user.sharing_enabled
+    if current_user.sharing_enabled:
+        if not current_user.share_token:
+            current_user.generate_share_token()
+    db.session.commit()
+    flash("🔒 Sharing mode updated.", "success")
+    return redirect(url_for('mood.dashboard'))
+
+@mood_bp.route('/shared/<token>')
+def shared_view(token):
+    from application.models import User
+
+    user = User.query.filter_by(share_token=token, sharing_enabled=True).first_or_404()
+    entries = MoodEntry.query.filter_by(user_id=user.id).order_by(MoodEntry.date.desc()).all()
+    return render_template('mood/shared_view.html', entries=entries)

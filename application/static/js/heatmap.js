@@ -36,9 +36,24 @@ document.addEventListener("DOMContentLoaded", function () {
     series: [{
       type: 'heatmap',
       coordinateSystem: 'calendar',
-      data: seriesData
+      data: seriesData,
+      emphasis: {
+        itemStyle: {
+          borderColor: '#000',
+          borderWidth: 2
+        }
+      }
     }]
   };
 
   myChart.setOption(option);
+
+  myChart.on('click', function (params) {
+  const clickedDate = params.name;
+  if (moodData[clickedDate]) {
+    window.location.href = `/history?date=${clickedDate}`;
+  } else {
+    alert(`No mood entry on ${clickedDate}`);
+  }
+});
 });

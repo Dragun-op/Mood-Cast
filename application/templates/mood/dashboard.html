@@ -39,4 +39,16 @@
     </div>
   </div>
 </div>
+  <form action="{{ url_for('mood.toggle_sharing') }}" method="get">
+    <button class="btn btn-{{ 'danger' if current_user.sharing_enabled else 'primary' }}">
+      {{ 'Disable Sharing' if current_user.sharing_enabled else 'Enable Trusted Sharing' }}
+    </button>
+  </form>
+
+  {% if current_user.sharing_enabled %}
+    <div class="mt-3">
+      <label>🔗 Your Trusted Share Link:</label><br>
+      <code>{{ url_for('mood.shared_view', token=current_user.share_token, _external=True) }}</code>
+    </div>
+  {% endif %}
 {% endblock %}

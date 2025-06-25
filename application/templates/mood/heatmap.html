@@ -23,15 +23,12 @@
 {% endblock %}
 
 {% block extra_scripts %}
-  <!-- Apache ECharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 
-  <!-- Pass mood data -->
   <script>
     window.moodData = {{ mood_data | tojson }};
     window.moodColors = {{ mood_colors | tojson }};
   </script>
 
-  <!-- Custom heatmap logic -->
   <script src="{{ url_for('static', filename='js/heatmap.js') }}"></script>
 {% endblock %}

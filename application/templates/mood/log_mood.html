@@ -1,33 +1,63 @@
 {% extends 'base.html' %}
-{% block title %}Log Mood{% endblock %}
+{% block title %}Log Mood | MoodCast{% endblock %}
 
 {% block content %}
-<div class="container">
-  <h2 class="mb-4 text-gray-800">Log Today's Mood</h2>
-  <form method="POST">
-    {{ form.hidden_tag() }}
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h2 class="mb-4 text-center text-primary">Log Today's Mood</h2>
 
-    <div class="form-group">
-      {{ form.mood.label(class="form-label") }}
-      {{ form.mood(class="form-control") }}
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ 'danger' if category == 'error' or category == 'danger' else category }} alert-dismissible fade show" role="alert">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <form method="POST" novalidate>
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+          {{ form.mood.label(class="form-label") }}
+          {{ form.mood(class="form-control") }}
+          {% for error in form.mood.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          {{ form.intensity.label(class="form-label") }}
+          {{ form.intensity(class="form-control", placeholder="Optional (1-10)") }}
+          {% for error in form.intensity.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          {{ form.tags.label(class="form-label") }}
+          {{ form.tags(class="form-control", placeholder="e.g. work, family") }}
+          {% for error in form.tags.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="mb-3">
+          {{ form.notes.label(class="form-label") }}
+          {{ form.notes(class="form-control", rows="4", placeholder="Write more about your mood...") }}
+          {% for error in form.notes.errors %}
+            <div class="text-danger small">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
+        </div>
+      </form>
     </div>
-
-    <div class="form-group">
-      {{ form.intensity.label(class="form-label") }}
-      {{ form.intensity(class="form-control", placeholder="Optional (1-10)") }}
-    </div>
-
-    <div class="form-group">
-      {{ form.tags.label(class="form-label") }}
-      {{ form.tags(class="form-control", placeholder="e.g. work, family") }}
-    </div>
-
-    <div class="form-group">
-      {{ form.notes.label(class="form-label") }}
-      {{ form.notes(class="form-control", rows="4", placeholder="Write more about your mood...") }}
-    </div>
-
-    <button type="submit" class="btn btn-primary">{{ form.submit.label.text }}</button>
-  </form>
+  </div>
 </div>
 {% endblock %}
