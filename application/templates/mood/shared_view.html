@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>📖 Shared Mood History</h2>
+
+  {% if entries %}
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover mt-3">
+        <thead class="table-dark">
+          <tr>
+            <th>Date</th>
+            <th>Mood</th>
+            <th>Intensity</th>
+            <th>Tags</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for entry in entries %}
+          <tr>
+            <td>{{ entry.date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ entry.mood }}</td>
+            <td>{{ entry.intensity }}</td>
+            <td>{{ entry.tags }}</td>
+            <td>{{ entry.notes }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <p class="text-muted">No entries available for this user.</p>
+  {% endif %}
+</div>
+{% endblock %}
