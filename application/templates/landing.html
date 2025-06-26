@@ -2,34 +2,36 @@
 {% block title %}Welcome to MoodCast{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container py-5">
   {% if current_user.is_authenticated %}
 
-    <h1 class="h3 mb-4 text-gray-800 text-center">Welcome back, {{ current_user.username }} 👋</h1>
-    
-    <div class="row">
+    <h1 class="h3 mb-5 text-gray-800 text-center">Welcome back, {{ current_user.username }} 👋</h1>
+
+    <div class="row justify-content-center">
       <div class="col-md-4 mb-4">
-        <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card border-left-primary shadow h-100 py-4">
           <div class="card-body text-center">
-            <i class="fas fa-edit fa-2x text-primary mb-2"></i>
+            <i class="fas fa-edit fa-2x text-primary mb-3"></i>
             <h5 class="card-title">Log Today's Mood</h5>
             <a href="{{ url_for('mood.log_mood') }}" class="btn btn-primary mt-2">Log Now</a>
           </div>
         </div>
       </div>
+
       <div class="col-md-4 mb-4">
-        <div class="card border-left-info shadow h-100 py-2">
+        <div class="card border-left-info shadow h-100 py-4">
           <div class="card-body text-center">
-            <i class="fas fa-calendar-alt fa-2x text-info mb-2"></i>
+            <i class="fas fa-calendar-alt fa-2x text-info mb-3"></i>
             <h5 class="card-title">Mood Heatmap</h5>
             <a href="{{ url_for('mood.heatmap') }}" class="btn btn-info mt-2">View Heatmap</a>
           </div>
         </div>
       </div>
+
       <div class="col-md-4 mb-4">
-        <div class="card border-left-success shadow h-100 py-2">
+        <div class="card border-left-success shadow h-100 py-4">
           <div class="card-body text-center">
-            <i class="fas fa-brain fa-2x text-success mb-2"></i>
+            <i class="fas fa-brain fa-2x text-success mb-3"></i>
             <h5 class="card-title">Emotional Triggers</h5>
             <a href="{{ url_for('mood.triggers') }}" class="btn btn-success mt-2">View Insights</a>
           </div>
@@ -37,33 +39,72 @@
       </div>
     </div>
 
+    <div class="mt-5 text-center">
+      <blockquote class="blockquote text-muted">
+        <p>"What we feel is what we become. Let's understand it better."</p>
+        <footer class="blockquote-footer">MoodCast Philosophy</footer>
+      </blockquote>
+    </div>
+
   {% else %}
 
-    <div class="text-center">
-      <h1 class="h3 mb-4 text-gray-800">Welcome to MoodCast 🧠</h1>
+    <div class="jumbotron py-5 text-center bg-gradient-primary text-white mb-5 rounded">
+      <h1 class="display-4">Welcome to MoodCast 🧠</h1>
       <p class="lead">Your Predictive Mental Wellness Companion</p>
+      <div class="mt-4">
+        <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg me-3">Get Started</a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg">Login</a>
+      </div>
+    </div>
 
-      <div class="row justify-content-center mt-5">
-        <div class="col-md-8">
-          <div class="card shadow mb-4">
-            <div class="card-body">
-              <p>MoodCast helps you track, analyze, and improve your emotional wellbeing.</p>
-              <ul class="list-group list-group-flush text-left">
-                <li class="list-group-item"><i class="fas fa-check-circle text-success"></i> Log moods daily with tags and notes</li>
-                <li class="list-group-item"><i class="fas fa-brain text-primary"></i> Discover emotional triggers with AI insights</li>
-                <li class="list-group-item"><i class="fas fa-calendar-alt text-info"></i> Visualize patterns via mood heatmaps</li>
-                <li class="list-group-item"><i class="fas fa-user-friends text-warning"></i> Share progress with trusted friends or family</li>
-                <li class="list-group-item"><i class="fas fa-bell text-danger"></i> Get reminders for long-term low moods</li>
-              </ul>
-              <div class="mt-4">
-                <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Get Started</a>
-                <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-lg">Login</a>
-              </div>
+    <div class="text-center mb-5">
+      <h2 class="h4 text-gray-800">How It Works</h2>
+      <div class="row mt-4 justify-content-center">
+        <div class="col-md-3 mb-4">
+          <div class="card shadow-sm p-3 text-center">
+            <i class="fas fa-pen-alt fa-2x text-primary mb-2"></i>
+            <h6>Log Moods</h6>
+            <p class="small">Track daily feelings with tags & notes.</p>
+          </div>
+        </div>
+        <div class="col-md-3 mb-4">
+          <div class="card shadow-sm p-3 text-center">
+            <i class="fas fa-chart-line fa-2x text-info mb-2"></i>
+            <h6>View Trends</h6>
+            <p class="small">Understand your patterns through visuals.</p>
+          </div>
+        </div>
+        <div class="col-md-3 mb-4">
+          <div class="card shadow-sm p-3 text-center">
+            <i class="fas fa-heartbeat fa-2x text-success mb-2"></i>
+            <h6>Get Insights</h6>
+            <p class="small">Discover what affects your mental wellness.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mb-5">
+      <div class="col-md-8">
+        <div class="card shadow">
+          <div class="card-body p-4">
+            <h5 class="mb-3">Why Choose MoodCast?</h5>
+            <ul class="list-group list-group-flush text-start mb-4">
+              <li class="list-group-item"><i class="fas fa-check-circle text-success me-2"></i> Smart mood logging with notes, tags & intensity</li>
+              <li class="list-group-item"><i class="fas fa-brain text-primary me-2"></i> AI-powered emotional trigger detection</li>
+              <li class="list-group-item"><i class="fas fa-calendar-alt text-info me-2"></i> GitHub-style mood heatmap</li>
+              <li class="list-group-item"><i class="fas fa-users text-warning me-2"></i> Option to share progress with friends/family</li>
+              <li class="list-group-item"><i class="fas fa-bell text-danger me-2"></i> Custom mood reminders</li>
+            </ul>
+            <div class="d-flex justify-content-center gap-3">
+              <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg">Start Now</a>
+              <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-lg">Already have an account?</a>
             </div>
           </div>
         </div>
       </div>
     </div>
+
   {% endif %}
 </div>
 {% endblock %}
