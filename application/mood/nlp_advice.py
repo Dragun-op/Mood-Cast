@@ -1,18 +1,8 @@
-from transformers import pipeline
-from application.models import UserTriggerCategory
+import os
+import requests
 from flask_login import current_user
 from application import db
-
-classifier = pipeline(
-    "zero-shot-classification",
-    model="facebook/bart-large-mnli"
-)
-
-emotion_model = pipeline(
-    "text-classification",
-    model="j-hartmann/emotion-english-distilroberta-base",
-    top_k=None
-)
+from application.models import UserTriggerCategory
 
 TRIGGER_CATEGORIES = [
     "Anxiety", "Depression", "Loneliness", "Burnout", "Mood swings", "Intrusive thoughts",
@@ -66,13 +56,37 @@ ADVICE_MAP = {
     "Feeling lost": "You’re not broken—just evolving. Journal your thoughts.",
     "Lack of purpose": "Volunteer or create. Purpose often emerges through action.",
     "Existential thoughts": "Big questions are human. Consider philosophical journaling or therapy.",
-    "Major life changes": "Transitions are tough. Ground yourself with familiar routines."
+    "Major life changes": "Transitions are tough. Ground yourself with familiar routines.",
+    "Uncategorized": "Take care of yourself. Reflect, breathe, and seek support."
 }
 
 def get_trigger_categories_with_advice(notes):
-    result = classifier(notes, TRIGGER_CATEGORIES, multi_label=True)
+    from flask import current_app
+    HF_API_KEY = current_app.config["HF_API_KEY"]
+
+    headers = {
+        "Authorization": f"Bearer {HF_API_KEY}"
+    }
+
+    payload = {
+        "inputs": notes,
+        "parameters": {
+            "candidate_labels": TRIGGER_CATEGORIES,
+            "multi_label": True
+        }
+    }
+
+    response = requests.post(
+        "https://api-inference.huggingface.co/models/facebook/bart-large-mnli",
+        headers=headers,
+        json=payload
+    )
+    result = response.json()
+
     top_categories = [
-        (label, score) for label, score in zip(result["labels"], result["scores"]) if score > 0.4
+        (label, score)
+        for label, score in zip(result["labels"], result["scores"])
+        if score > 0.4
     ][:3]
 
     for label, score in top_categories:
@@ -83,6 +97,7 @@ def get_trigger_categories_with_advice(notes):
         for label, score in top_categories
     ]
 
+
 def increment_user_trigger_count(user_id, category):
     utc = UserTriggerCategory.query.filter_by(user_id=user_id, category=category).first()
     if utc:
@@ -92,6 +107,20 @@ def increment_user_trigger_count(user_id, category):
         db.session.add(utc)
     db.session.commit()
 
+
 def get_emotion_scores(text):
-    emotions = emotion_model(text)
-    return sorted(emotions[0], key=lambda x: x['score'], reverse=True)
+    from flask import current_app
+    HF_API_KEY = current_app.config["HF_API_KEY"]
+
+    headers = {
+        "Authorization": f"Bearer {HF_API_KEY}"
+    }
+
+    response = requests.post(
+        "https://api-inference.huggingface.co/models/j-hartmann/emotion-english-distilroberta-base",
+        headers=headers,
+        json={"inputs": text}
+    )
+
+    result = response.json()
+    return sorted(result[0], key=lambda x: x["score"], reverse=True)

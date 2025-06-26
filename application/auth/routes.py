@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from application import db
 from application.models import User
 from application.auth.forms import RegisterForm, LoginForm , ForgotPasswordForm, ResetPasswordForm
+from application.auth.utils import send_reset_email
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -32,8 +33,8 @@ def forgot_password():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user:
-            flash('✅ Email found! Reset your password now.', 'info')
-            return redirect(url_for('auth.reset_password', email=user.email))
+            send_reset_email(user)
+            flash('✅ Reset link sent! Please check your email.', 'info')
         else:
             flash('❌ Email not found.', 'danger')
     else:
@@ -42,12 +43,11 @@ def forgot_password():
                 flash(f"{field.capitalize()}: {error}", "danger")
     return render_template('auth/forgot_password.html', form=form)
 
-@auth_bp.route('/reset-password', methods=['GET', 'POST'])
-def reset_password():
-    email = request.args.get('email')
-    user = User.query.filter_by(email=email).first()
+@auth_bp.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    user = User.verify_reset_token(token)
     if not user:
-        flash('❌ Invalid or expired reset link.', 'danger')
+        flash('❌ Invalid or expired reset token.', 'danger')
         return redirect(url_for('auth.forgot_password'))
 
     form = ResetPasswordForm()

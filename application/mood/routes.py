@@ -1,13 +1,11 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request
+from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required, current_user
 from application import db
-from application.models import MoodEntry,UserTriggerCategory
+from application.models import MoodEntry, UserTriggerCategory
 from application.mood.forms import MoodForm
-from datetime import date, timedelta , datetime
+from datetime import date, timedelta, datetime
 from sqlalchemy import or_, and_
-from collections import Counter
-from application.mood.nlp_advice import get_trigger_categories_with_advice,get_emotion_scores
-
+from application.mood.nlp_advice import get_trigger_categories_with_advice, get_emotion_scores
 
 mood_bp = Blueprint('mood', __name__)
 
@@ -62,22 +60,34 @@ def heatmap():
         mood_colors=mood_colors
     )
 
-@mood_bp.route("/triggers")
+@mood_bp.route('/triggers')
 @login_required
 def triggers():
-    entries = MoodEntry.query.filter_by(user_id=current_user.id).order_by(MoodEntry.date.desc()).limit(5).all()
+    entries = MoodEntry.query.filter(
+        MoodEntry.user_id == current_user.id,
+        MoodEntry.notes != None
+    ).order_by(MoodEntry.date.desc()).limit(2).all()
+
     trigger_results = []
 
     for entry in entries:
-        if entry.notes:
+        if not entry.trigger_results_json or not entry.emotion_scores_json:
             advice_data = get_trigger_categories_with_advice(entry.notes)
             emotions = get_emotion_scores(entry.notes)
-            trigger_results.append({
-                "notes": entry.notes,
-                "timestamp": entry.date,
-                "triggers": advice_data,
-                "emotion_scores": emotions
-            })
+            entry.trigger_results_json = advice_data
+            entry.emotion_scores_json = emotions
+            entry.last_processed_at = datetime.utcnow()
+            db.session.commit()
+        else:
+            advice_data = entry.trigger_results_json
+            emotions = entry.emotion_scores_json
+
+        trigger_results.append({
+            "notes": entry.notes,
+            "timestamp": entry.date,
+            "triggers": advice_data,
+            "emotion_scores": emotions
+        })
 
     top_categories = UserTriggerCategory.query.filter_by(user_id=current_user.id)\
         .order_by(UserTriggerCategory.count.desc()).limit(3).all()
@@ -123,12 +133,8 @@ def mood_history():
         except:
             pass
 
-
     sort_attr = getattr(MoodEntry, sort_by, MoodEntry.date)
-    if order == 'asc':
-        query = query.order_by(sort_attr.asc())
-    else:
-        query = query.order_by(sort_attr.desc())
+    query = query.order_by(sort_attr.asc() if order == 'asc' else sort_attr.desc())
 
     entries = query.all()
     return render_template('mood/history.html', entries=entries)
@@ -137,9 +143,8 @@ def mood_history():
 @login_required
 def toggle_sharing():
     current_user.sharing_enabled = not current_user.sharing_enabled
-    if current_user.sharing_enabled:
-        if not current_user.share_token:
-            current_user.generate_share_token()
+    if current_user.sharing_enabled and not current_user.share_token:
+        current_user.generate_share_token()
     db.session.commit()
     flash("🔒 Sharing mode updated.", "success")
     return redirect(url_for('mood.dashboard'))
@@ -147,7 +152,6 @@ def toggle_sharing():
 @mood_bp.route('/shared/<token>')
 def shared_view(token):
     from application.models import User
-
     user = User.query.filter_by(share_token=token, sharing_enabled=True).first_or_404()
     entries = MoodEntry.query.filter_by(user_id=user.id).order_by(MoodEntry.date.desc()).all()
     return render_template('mood/shared_view.html', entries=entries)
